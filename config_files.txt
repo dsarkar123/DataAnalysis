@@ -1,0 +1,43 @@
+# requirements.txt
+pymongo==4.6.0
+requests==2.31.0
+python-dotenv==1.0.0
+
+# .env.example
+# Copy this to .env and fill in your values
+GITHUB_TOKEN=your_github_personal_access_token_here
+MONGODB_URI=mongodb://localhost:27017/
+DATABASE_NAME=github_data
+GITHUB_OWNER=octocat
+
+# docker-compose.yml (Optional - for MongoDB setup)
+version: '3.8'
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: github_mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - mongodb_data:/data/db
+      - ./mongo-init:/docker-entrypoint-initdb.d
+
+volumes:
+  mongodb_data:
+
+# mongo-init/init.js (Optional - MongoDB initialization)
+db = db.getSiblingDB('github_data');
+
+// Create collections with validation
+db.createCollection('repositories');
+db.createCollection('commits');
+db.createCollection('contributors');
+db.createCollection('pull_requests');
+db.createCollection('issues');
+db.createCollection('comments');
+
+print('GitHub database initialized successfully');

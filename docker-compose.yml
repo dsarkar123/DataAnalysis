@@ -1,0 +1,19 @@
+# docker-compose.yml
+version: '3.8'
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: github_mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    # IMPORTANT: Removed environment variables for authentication
+    #   MONGO_INITDB_ROOT_USERNAME: admin
+    #   MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - mongodb_data:/data/db
+      # If you remove authentication, you likely won't need custom init scripts
+      # - ./mongo-init:/docker-entrypoint-initdb.d
+
+volumes:
+  mongodb_data:
